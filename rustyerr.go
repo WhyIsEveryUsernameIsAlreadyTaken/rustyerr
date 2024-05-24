@@ -1,7 +1,7 @@
 package rustyerr
 
-type okVariant struct {
-    value any
+type okVariant[T any] struct {
+    value T
 }
 
 type errVariant struct {
@@ -10,14 +10,14 @@ type errVariant struct {
 
 type variant interface{}
 
-type Result struct {
+type Result[T any] struct {
     variant
 }
 
-func (res Result) Unwrap() any {
+func (res *Result[T]) Unwrap() T {
     switch res.variant.(type) {
-    case okVariant:
-        return res.variant.(okVariant).value
+    case okVariant[T]:
+        return res.variant.(okVariant[T]).value
     case errVariant:
         panic(res.variant.(errVariant).errval)
     default:
@@ -25,18 +25,19 @@ func (res Result) Unwrap() any {
 }
 }
 
-func Ok(obj any) Result {
-    return Result{
-        variant: okVariant{
+func Ok[T any](obj T) Result[T] {
+    return Result[T]{
+        variant: okVariant[T]{
             value: obj,
         },
     }
 }
 
-func Err(err error) Result {
-    return Result{
+func Err[T any](err error) Result[T] {
+    return Result[T]{
         variant: errVariant{
             errval: err,
         },
     }
 }
+
