@@ -14,7 +14,7 @@ type Result[T any] struct {
     variant
 }
 
-func (res *Result[T]) Unwrap() T {
+func (res Result[T]) Unwrap() T {
     switch res.variant.(type) {
     case okVariant[T]:
         return res.variant.(okVariant[T]).value
