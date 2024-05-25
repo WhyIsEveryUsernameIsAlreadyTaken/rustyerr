@@ -33,8 +33,8 @@ func Ok[T any](obj T) Result[T] {
     }
 }
 
-func Err[T any](err error) Result[T] {
-    return Result[T]{
+func Err(err error) Result[error] {
+    return Result[error]{
         variant: errVariant{
             errval: err,
         },
